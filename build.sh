@@ -16,18 +16,10 @@ build() {
   helm=$(echo $helm\" |grep -oP '(?<=tag\/v)[0-9][^"]*'|grep -v \-|sort -Vr|head -1)
   echo "helm version is $helm"
 
-  # kubectl latest
-  kubectl=$(curl -s https://github.com/kubernetes/kubectl/releases)
-  kubectl=$(echo $kubectl\" |grep -oP '(?<=tag\/v)[0-9][^"<]*'|grep -v \-|sort -Vr|head -1)
-  echo "kubectl version is $kubectl"
-
   # doctl latest
   doctl=$(curl -s https://github.com/digitalocean/doctl/releases)
   doctl=$(echo $doctl\" |grep -oP '(?<=tag\/v)[0-9][^"<]*'|grep -v \-|sort -Vr|head -1)
   echo "doctl version is $doctl"
-
-  # set kubectl version as image's tag
-  tag=${kubectl}
 
   docker build --no-cache \
     --build-arg KUBECTL_VERSION=${tag} \
@@ -55,12 +47,17 @@ build() {
 }
 
 image="alpine/doctl"
-curl -s https://raw.githubusercontent.com/awsdocs/amazon-eks-user-guide/master/doc_source/kubernetes-versions.md |egrep -A 10 "The following Kubernetes versions"|grep ^+ |awk '{gsub("\\\\", ""); print $NF}' |sort -Vr | while read tag
-do
-  echo ${tag}
-  status=$(curl -sL https://hub.docker.com/v2/repositories/${image}/tags/${tag})
-  echo $status
-  if [[ ( "${status}" =~ "not found" ) || ( ${REBUILD} == "true" ) ]]; then
-     build
-  fi
-done
+
+# kubectl latest
+kubectl=$(curl -s https://github.com/kubernetes/kubectl/releases)
+kubectl=$(echo $kubectl\" |grep -oP '(?<=tag\/v)[0-9][^"<]*'|grep -v \-|sort -Vr|head -1)
+echo "kubectl version is $kubectl"
+
+# set kubectl version as image's tag
+tag=${kubectl}
+
+status=$(curl -sL https://hub.docker.com/v2/repositories/${image}/tags/${tag})
+echo $status
+if [[ ( "${status}" =~ "not found" ) || ( ${REBUILD} == "true" ) ]]; then
+   build
+fi
