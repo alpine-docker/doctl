@@ -43,6 +43,8 @@ build() {
   if [[ "$CIRCLE_BRANCH" == "main" ]]; then
     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     docker push ${image}:${tag}
+    docker tag ${image}:${tag} ${image}:latest
+    docker push ${image}:latest
   fi
 }
 

@@ -4,8 +4,6 @@ DigitalOcean tool images with necessary tools, it can be used as normal kubectl 
 
 Image tag is kubectl version, not doctl version
 
-There is no `latest` tag for this image
-
 ### Installed tools
 
 - [kubectl](https://github.com/kubernetes/kubectl) (latest release), use as image tag
@@ -38,6 +36,6 @@ export REBUILD=true
 bash ./build.sh
 ```
 
-### Weekly build
+### schedule builds
 
 Build job runs daily by [CircleCI](https://circleci.com/dashboard)
