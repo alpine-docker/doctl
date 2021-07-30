@@ -1,6 +1,6 @@
 # DigitalOcean tools 
 
-DigitalOcean tool images with necessary tools, it can be used as normal kubectl tool as well.
+DigitalOcean tool images with necessary tools, it can be used as normal kubectl or doctl command line as well.
 
 Image tag is kubectl version, not doctl version
 
@@ -40,4 +40,4 @@ bash ./build.sh
 
 ### Weekly build
 
-Build job runs weekly
+Build job runs daily by [CircleCI](https://circleci.com/dashboard)
