@@ -40,7 +40,7 @@ build() {
     exit
   fi
 
-  if [[ "$CIRCLE_BRANCH" == "master" ]]; then
+  if [[ "$CIRCLE_BRANCH" == "main" ]]; then
     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     docker push ${image}:${tag}
   fi
