@@ -23,8 +23,8 @@ RUN curl -sLO https://storage.googleapis.com/kubernetes-release/release/v${KUBEC
 
 # Install doctl (latest release)
 RUN curl -slO https://github.com/digitalocean/doctl/releases/download/v${DOCTL_VERSION}/doctl-${DOCTL_VERSION-linux-amd64.tar.gz && \
-  tar zxvf doctl*.tar.gz
-  chmod +x doctl
+  tar zxvf doctl*.tar.gz && \
+  chmod +x doctl && \
   mv doctl /usr/bin/doctl
 
 WORKDIR /apps
