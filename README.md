@@ -2,7 +2,7 @@
 
 DigitalOcean tool images with necessary tools, it can be used as normal kubectl or doctl command line as well.
 
-Image tag is kubectl version, not doctl version
+**Image tag is kubectl version, not doctl version**
 
 ### Installed tools
 
@@ -10,6 +10,7 @@ Image tag is kubectl version, not doctl version
 - [helm](https://github.com/helm/helm) (latest release)
 - [doctl](https://github.com/digitalocean/doctl) (latest release)
 - General tools, such as bash, curl
+- Recommend any other tools by raise PR.
 
 ### Github Repo
 
