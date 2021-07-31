@@ -6,9 +6,9 @@ DigitalOcean tool images with necessary tools, it can be used as normal kubectl 
 
 ### Installed tools
 
-- [kubectl](https://github.com/kubernetes/kubectl) (latest release), use as image tag
-- [helm](https://github.com/helm/helm) (latest release)
-- [doctl](https://github.com/digitalocean/doctl) (latest release)
+- [doctl](https://github.com/digitalocean/doctl) (latest release, when run the build)
+- [kubectl](https://github.com/kubernetes/kubectl) (latest release, when run the build)
+- [helm](https://github.com/helm/helm) (latest release, when run the build)
 - General tools, such as bash, curl
 - Recommend any other tools by raise PR.
 
