@@ -28,6 +28,31 @@ https://hub.docker.com/r/alpine/doctl/tags/
 
 Mostly it is used during CI/CD (continuous integration and continuous delivery) or as part of an automated build/deployment
 
+# A sample for you to use it in CICD
+
+Make sure you have set a secret variable `DIGITALOCEAN_TOKEN` in its pipeline, with below pipeline, you can 
+
+```
+
+    steps:
+      - checkout
+      - run:
+          name: helm_chart_deployment
+          environment:
+            name: << parameters.environment>>
+          command: |
+            # doctl authenticating
+            doctl auth init -t ${DIGITALOCEAN_TOKEN}
+            # run other doctl command if required
+            apk add jq
+            # save Kube config
+            id=$(doctl kubernetes cluster list -o  json |jq -r  .[].id)
+            doctl kubernetes cluster kubeconfig save ${id}
+            # deploy a helm chart
+            cd charts/application_name
+            helm upgrade --install my-release .
+```
+
 # Involve with developing and testing
 
 If you want to build these images by yourself, please follow below commands.
