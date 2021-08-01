@@ -38,8 +38,6 @@ Make sure you have set a secret variable `DIGITALOCEAN_TOKEN` in its pipeline, w
       - checkout
       - run:
           name: helm_chart_deployment
-          environment:
-            name: << parameters.environment>>
           command: |
             # doctl authenticating
             doctl auth init -t ${DIGITALOCEAN_TOKEN}
