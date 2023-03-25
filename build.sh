@@ -85,5 +85,6 @@ done
 
 # update latest image
 
+docker pull ${image}:${latest_versions[0]}
 docker tag ${image}:${latest_versions[0]} ${image}:latest
 docker push ${image}:latest
