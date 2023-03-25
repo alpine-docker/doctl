@@ -84,7 +84,7 @@ for tag in "${latest_versions[@]}"; do
 done
 
 # update latest image
-
+docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 docker pull ${image}:${latest_versions[0]}
 docker tag ${image}:${latest_versions[0]} ${image}:latest
 docker push ${image}:latest
