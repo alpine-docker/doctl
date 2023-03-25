@@ -43,23 +43,47 @@ build() {
   if [[ "$CIRCLE_BRANCH" == "main" ]]; then
     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     docker push ${image}:${tag}
-    docker tag ${image}:${tag} ${image}:latest
-    docker push ${image}:latest
   fi
 }
 
 image="alpine/doctl"
 
-# kubectl latest
-kubectl=$(curl -s https://github.com/kubernetes/kubectl/releases)
-kubectl=$(echo $kubectl\" |grep -oP '(?<=tag\/v)[0-9][^"<]*'|grep -v \-|sort -Vr|head -1)
-echo "kubectl version is $kubectl"
+# Get the list of all releases tags, excludes alpha, beta, rc tags
+releases=$(curl -s https://api.github.com/repos/kubernetes/kubernetes/releases | jq -r '.[].tag_name | select(test("alpha|beta|rc") | not)')
 
-# set kubectl version as image's tag
-tag=${kubectl}
+# Loop through the releases and extract the minor version number
+for release in $releases; do
+  minor_version=$(echo $release | awk -F'.' '{print $1"."$2}')
 
-status=$(curl -sL https://hub.docker.com/v2/repositories/${image}/tags/${tag})
-echo $status
-if [[ ( "${status}" =~ "not found" ) || ( ${REBUILD} == "true" ) ]]; then
-   build
-fi
+  # Check if the minor version is already in the array of minor versions
+  if [[ ! " ${minor_versions[@]} " =~ " ${minor_version} " ]]; then
+    minor_versions+=($minor_version)
+  fi
+done
+
+# Sort the unique minor versions in reverse order
+sorted_minor_versions=($(echo "${minor_versions[@]}" | tr ' ' '\n' | sort -rV))
+
+# Loop through the first 4 unique minor versions and get the latest version for each
+for i in $(seq 0 3); do
+  minor_version="${sorted_minor_versions[$i]}"
+  latest_version=$(echo "$releases" | grep "^$minor_version\." | sort -rV | head -1 | sed 's/v//')
+  latest_versions+=($latest_version)
+done
+
+echo "Found k8s latest versions: ${latest_versions[*]}"
+
+for tag in "${latest_versions[@]}"; do
+  echo ${tag}
+  status=$(curl -sL https://hub.docker.com/v2/repositories/${image}/tags/${tag})
+  echo $status
+  if [[ ( "${status}" =~ "not found" ) ||( ${REBUILD} == "true" ) ]]; then
+     echo "build image for ${tag}"
+     build
+  fi
+done
+
+# update latest image
+
+docker tag ${image}:${latest_versions[0]} ${image}:latest
+docker push ${image}:latest
