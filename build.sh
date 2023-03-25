@@ -81,7 +81,7 @@ main() {
   image="alpine/doctl"
 
   latest_kubectl_versions=($(get_latest_kubectl_minor_releases))
-  echo "latest kubectl versions of each minor version are ${latest_versions[@]}"
+  echo "latest kubectl versions of each minor version are ${latest_kubectl_versions[@]}"
 
   latest_helm_version=$(get_latest_helm_version)
   echo "latest helm version is ${latest_helm_version}"
