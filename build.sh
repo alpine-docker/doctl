@@ -73,7 +73,7 @@ build() {
 
   if [[ "$CIRCLE_BRANCH" == "main" ]]; then
     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-    #docker push ${image}:${tag}
+    docker push ${image}:${tag}
   fi
 }
 
@@ -103,7 +103,7 @@ main() {
   docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
   docker pull ${image}:${latest_kubectl_versions[0]}
   docker tag ${image}:${latest_kubectl_versions[0]} ${image}:latest
-  #docker push ${image}:latest
+  docker push ${image}:latest
 
 }
 
