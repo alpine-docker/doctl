@@ -39,14 +39,12 @@ function get_latest_kubectl_minor_releases() {
 function get_latest_helm_version() {
   local helm=$(curl -s https://github.com/helm/helm/releases)
   helm=$(echo $helm\" |grep -oP '(?<=tag\/v)[0-9][^"]*'|grep -v \-|sort -Vr|head -1)
-  echo "helm version is $helm"
   echo $helm
 }
 
 function get_latest_doctl_version() {
   local doctl=$(curl -s https://github.com/digitalocean/doctl/releases)
   doctl=$(echo $doctl\" |grep -oP '(?<=tag\/v)[0-9][^"<]*'|grep -v \-|sort -Vr|head -1)
-  echo "doctl version is $doctl"
   echo $doctl
 }
 
@@ -98,7 +96,7 @@ main() {
   for tag in "${latest_kubectl_versions[@]}"; do
     echo ${tag}
     status=$(curl -sL https://hub.docker.com/v2/repositories/${image}/tags/${tag})
-    echo $status
+    echo ${status}
     if [[ ( "${status}" =~ "not found" ) ||( ${REBUILD} == "true" ) ]]; then
        echo "build image for ${tag}"
        build
