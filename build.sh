@@ -52,6 +52,12 @@ function get_latest_doctl_version() {
 
 build() {
 
+  echo docker build --no-cache \
+    --build-arg KUBECTL_VERSION=${tag} \
+    --build-arg HELM_VERSION=${latest_helm_version} \
+    --build-arg DOCTL_VERSION=${latest_doctl_version} \
+    -t ${image}:${tag} .
+
   docker build --no-cache \
     --build-arg KUBECTL_VERSION=${tag} \
     --build-arg HELM_VERSION=${latest_helm_version} \
