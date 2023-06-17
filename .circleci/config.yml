@@ -19,6 +19,7 @@ workflows:
     jobs:
       - build:
           name: build
+          context: Docker-Hub
 
   nightly:
     triggers:
@@ -32,6 +33,7 @@ workflows:
     jobs:
       - build:
           name: build
+          context: Docker-Hub
           filters:
             branches:
               only:
