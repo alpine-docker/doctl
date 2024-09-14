@@ -17,7 +17,7 @@ RUN apk add --update --no-cache curl ca-certificates bash git && \
     rm -rf linux-amd64
 
 # Install kubectl (latest release)
-RUN curl -LO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
+RUN curl -LO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     mv kubectl /usr/bin/kubectl && \
     chmod +x /usr/bin/kubectl
 
