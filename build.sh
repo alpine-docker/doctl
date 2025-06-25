@@ -48,18 +48,26 @@ function get_latest_doctl_version() {
   echo $doctl
 }
 
+function get_latest_pvmigrate_version() {
+  local doctl=$(curl -s https://github.com/utkuozdemir/pv-migrate/releases)
+  pvmigrate=$(echo $pvmigrate\" |grep -oP '(?<=tag\/v)[0-9][^"<]*'|grep -v \-|sort -Vr|head -1)
+  echo $pvmigrate
+}
+
 build() {
 
   echo docker build --no-cache \
     --build-arg KUBECTL_VERSION=${tag} \
     --build-arg HELM_VERSION=${latest_helm_version} \
     --build-arg DOCTL_VERSION=${latest_doctl_version} \
+    --build-arg PVMIGRATE_VERSION=${latest_pvmigrate_version} \
     -t ${image}:${tag} .
 
   docker build --no-cache \
     --build-arg KUBECTL_VERSION=${tag} \
     --build-arg HELM_VERSION=${latest_helm_version} \
     --build-arg DOCTL_VERSION=${latest_doctl_version} \
+    --build-arg PVMIGRATE_VERSION=${latest_pvmigrate_version} \
     -t ${image}:${tag} .
 
   # run test
@@ -97,6 +105,9 @@ main() {
 
   latest_doctl_version=$(get_latest_doctl_version)
   echo "latest doctl version is ${latest_doctl_version}"
+
+  latest_pvmigrate_version}=$(get_latest_pvmigrate_version)
+  echo "latest pv-migrate version is ${latest_pvmigrate_version}"
   
   for tag in "${latest_kubectl_versions[@]}"; do
     echo ${tag}
