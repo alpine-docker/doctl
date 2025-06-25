@@ -49,7 +49,7 @@ function get_latest_doctl_version() {
 }
 
 function get_latest_pvmigrate_version() {
-  local doctl=$(curl -s https://github.com/utkuozdemir/pv-migrate/releases)
+  local pvmigrate=$(curl -s https://github.com/utkuozdemir/pv-migrate/releases)
   pvmigrate=$(echo $pvmigrate\" |grep -oP '(?<=tag\/v)[0-9][^"<]*'|grep -v \-|sort -Vr|head -1)
   echo $pvmigrate
 }
@@ -86,7 +86,7 @@ build() {
   if [[ "$CIRCLE_BRANCH" == "main" ]]; then
     docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     docker push ${image}:${tag}
-    
+
     # update latest image
     docker pull ${image}:${latest_kubectl_versions[0]}
     docker tag ${image}:${latest_kubectl_versions[0]} ${image}:latest
@@ -106,9 +106,9 @@ main() {
   latest_doctl_version=$(get_latest_doctl_version)
   echo "latest doctl version is ${latest_doctl_version}"
 
-  latest_pvmigrate_version}=$(get_latest_pvmigrate_version)
+  latest_pvmigrate_version=$(get_latest_pvmigrate_version)
   echo "latest pv-migrate version is ${latest_pvmigrate_version}"
-  
+
   for tag in "${latest_kubectl_versions[@]}"; do
     echo ${tag}
     status=$(curl -sL https://hub.docker.com/v2/repositories/${image}/tags/${tag})

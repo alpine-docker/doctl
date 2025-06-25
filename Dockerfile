@@ -29,8 +29,8 @@ RUN apk add --update --no-cache tar && \
   apk del tar
 
 # Install pv-migrate (latest release)
-RUN wget https://github.com/utkuozdemir/pv-migrate/releases/download/${PVMIGRATE_VERSION}/pv-migrate_${PVMIGRATE_VERSION}_linux_x86_64.tar.gz && \
-  tar -xvzf pv-migrate_${DF_K8S_PV_MIGRATE_VERSION}_linux_x86_64.tar.gz && \
+RUN wget https://github.com/utkuozdemir/pv-migrate/releases/download/v${PVMIGRATE_VERSION}/pv-migrate_v${PVMIGRATE_VERSION}_linux_x86_64.tar.gz && \
+  tar -xvzf pv-migrate_v${PVMIGRATE_VERSION}_linux_x86_64.tar.gz && \
   mv pv-migrate /usr/local/bin
 
 WORKDIR /apps
